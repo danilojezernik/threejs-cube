@@ -1,0 +1,14 @@
+{
+  "name": "cube",
+  "version": "1.0.0",
+  "description": "Working on three.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "danilojezernik",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.145.0"
+  }
+}
