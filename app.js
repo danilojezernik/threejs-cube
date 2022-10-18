@@ -78,7 +78,12 @@ class App {
         /*
         To create a visible object using Three.js, you'll need Geometry and Material
         */
-        const geometry = new THREE.BoxGeometry()
+        // const geometry = new THREE.BoxGeometry()
+
+        // costume geometry starr or hexagon
+        const geometry = this.createStarGeometry()
+        // const geometry = this.createHexagonGeometry()
+
         const material = new THREE.MeshStandardMaterial({ color: 0xFF0000 })
 
         /*
@@ -99,6 +104,51 @@ class App {
         window.addEventListener('resize', this.resize.bind(this));
     }
 
+    createStarGeometry(innerRadius=0.4, outerRadius=0.8, points=5) {
+        const shape = new THREE.Shape();
+
+        const PI2 = Math.PI * 2;
+        const inc = PI2/(points*2);
+
+        shape.moveTo(outerRadius, 0);
+        let inner = true;
+
+        for(let theta=inc; theta<PI2; theta+=inc) {
+            const radius = (inner) ? innerRadius : outerRadius;
+            shape.lineTo(Math.cos(theta)*radius, Math.sin(theta)*radius);
+            inner = !inner;
+        }
+
+        const extrudeSettings = {
+            steps: 1,
+            depth: 0.5,
+            bevelEnabled: false
+        }
+
+        return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    }
+
+    createHexagonGeometry(radius=1, sides=6) {
+        const shape = new THREE.Shape();
+
+        const PI2 = Math.PI * 2;
+        const inc = PI2/sides;
+
+        shape.moveTo(radius, 0);
+
+        for(let theta=inc; theta<PI2; theta+=inc) {
+            shape.lineTo(Math.cos(theta)*radius, Math.sin(theta)*radius);
+        }
+
+        const extrudeSettings = {
+            steps: 1,
+            depth: 0.4,
+            bevelEnabled: false
+        }
+
+        return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    }
+
     resize() {
         /*
         In order for window to interact with resize of the window it must be added camera aspect ratio,
@@ -113,7 +163,7 @@ class App {
 
     render() {
         // mesh.rotateY it makes rotating cube on Y axis
-        this.mesh.rotateX(0.01)
+        this.mesh.rotateY(0.01)
         this.renderer.render(this.scene, this.camera)
     }
 }
